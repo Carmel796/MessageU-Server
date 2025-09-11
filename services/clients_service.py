@@ -4,6 +4,7 @@ from repositories.clients_repo import ClientsRepo
 
 class BadInput(Exception): pass
 class DuplicateUsername(Exception): pass
+class NoSuchUser(Exception): pass
 
 class ClientsService:
     def __init__(self, SessionLocal):
@@ -28,3 +29,13 @@ class ClientsService:
             except Exception:
                 s.rollback()
                 raise
+
+    def list_clients_excluding(self, requester_id):
+        with self.SessionLocal() as s:
+            # auth gate: requester must exist
+            if not ClientsRepo.get_by_id(s, requester_id):
+                raise NoSuchUser("requester")
+
+            # fetch (you can paginate/tune limit if needed)
+            rows = ClientsRepo.list_page(s, limit=1000)
+            return [(r.ID, r.UserName) for r in rows if r.ID != requester_id]
