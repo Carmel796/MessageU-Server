@@ -6,6 +6,8 @@ class BadInput(Exception): pass
 class DuplicateUsername(Exception): pass
 class NoSuchUser(Exception): pass
 
+# Clients Service - Encapsulate direct DB queries for handlers to use
+
 class ClientsService:
     def __init__(self, SessionLocal):
         self.SessionLocal = SessionLocal
@@ -25,6 +27,7 @@ class ClientsService:
                     raise DuplicateUsername()
                 ClientsRepo.insert(s, new_id, name, pubkey_bytes)
                 s.commit()
+                print(f"commited new client to DB")
                 return new_id
             except Exception:
                 s.rollback()
@@ -39,3 +42,15 @@ class ClientsService:
             # fetch (you can paginate/tune limit if needed)
             rows = ClientsRepo.list_page(s, limit=1000)
             return [(r.ID, r.UserName) for r in rows if r.ID != requester_id]
+
+    def get_public_key(self, requester_id, tgt_id):
+        with self.SessionLocal() as s:
+            if not ClientsRepo.get_by_id(s, requester_id):
+                raise NoSuchUser("requester")
+
+            tgt_client = ClientsRepo.get_by_id(s, tgt_id)
+            if not tgt_client:
+                raise NoSuchUser("target")
+
+            pubk = bytes(tgt_client.PublicKey)
+            return pubk

@@ -1,3 +1,5 @@
+import struct
+
 # app/protocol/constants.py
 VERSION = 2
 
@@ -22,3 +24,7 @@ OK_PULL_WAITING  = 2104  # payload: repeated [FromID(16)+MsgID(4)+Type(1)+Size(4
 
 # single global error response
 ERROR_CODE = 9000  # payload size = 0
+
+# protocol
+HEADER_FMT = "<16sBHI"
+HEADER_SIZE = struct.calcsize(HEADER_FMT)

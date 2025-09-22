@@ -1,11 +1,12 @@
 import socket
 import struct
+
+from protocol.constants import HEADER_SIZE, HEADER_FMT
 from protocol.validators import validate_header, validate_payload
 from protocol.errors import error_response
 from router import dispatch
 
-HEADER_FMT = "<16sBHI"
-HEADER_SIZE = struct.calcsize(HEADER_FMT)
+# Connection realted handlers
 
 def read_exact(conn: socket.socket, n: int) -> bytes:
     """Read exactly n bytes from a blocking socket or raise ConnectionError on EOF."""
@@ -47,5 +48,4 @@ def handle_request(conn, addr):
     except (ConnectionError, socket.timeout):
             pass
     finally:
-        try: conn.close()
-        except Exception: pass
+        conn.close()

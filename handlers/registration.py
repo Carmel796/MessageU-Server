@@ -4,6 +4,8 @@ from protocol.errors import error_response
 from services.clients_service import ClientsService, BadInput, DuplicateUsername
 from db import SessionLocal
 
+# Registration related handlers
+
 def op600_registration(_client_id, payload):
     name_bytes = payload[:NAME_LEN]
     pubk_bytes = payload[NAME_LEN:NAME_LEN + PUBKEY_LEN]

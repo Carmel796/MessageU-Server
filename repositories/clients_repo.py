@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, update
 from models import Client  # or: from app.models import Client
 
+# Direct DB actions using SQLAchemy ORM - return to services
 class ClientsRepo:
     @staticmethod
     def get_by_id(s: Session, client_id: bytes) -> Optional[Client]:

@@ -28,6 +28,7 @@ def main():
 
         while True:
             conn, addr = srv.accept()
+            print(f"New connection received")
             t = threading.Thread(target=handle_request, args=(conn, addr))
             t.start()
 
