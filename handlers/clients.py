@@ -1,5 +1,5 @@
 from services.clients_service import ClientsService, NoSuchUser
-from protocol.constants import OK_LIST_CLIENTS, NAME_LEN, ID_LEN
+from protocol.constants import OK_LIST_CLIENTS, NAME_LEN, ID_LEN, OK_GET_PUBKEY
 from protocol.errors import error_response
 from protocol.codec import build_response
 from db import SessionLocal
@@ -29,12 +29,13 @@ def op601_list_clients(client_id, _payload):
 
 
 def op602_get_pubkey(client_id, payload):
-    tgt_id_bytes = payload
+    if len(payload) != ID_LEN:
+        return error_response()
 
     svc = ClientsService(SessionLocal)
     try:
-        tgt_pubk = svc.get_public_key(client_id, tgt_id_bytes)
+        tgt_pubk = svc.get_public_key(client_id, payload)
     except Exception:
         return error_response()
 
-    return tgt_pubk
+    return build_response(OK_GET_PUBKEY, tgt_pubk)
