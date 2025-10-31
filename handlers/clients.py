@@ -2,7 +2,7 @@ from services.clients_service import ClientsService, NoSuchUser
 from protocol.constants import OK_LIST_CLIENTS, NAME_LEN, ID_LEN, OK_GET_PUBKEY
 from protocol.errors import error_response
 from protocol.codec import build_response
-from db import SessionLocal
+from database.db import SessionLocal
 
 # Clients related handlers
 

@@ -4,7 +4,7 @@ from typing import Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import select, update
-from models import Client  # or: from app.models import Client
+from database.models import Client  # or: from app.models import Client
 
 # Direct DB actions using SQLAchemy ORM - return to services
 class ClientsRepo:

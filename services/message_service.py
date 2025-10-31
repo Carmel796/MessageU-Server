@@ -1,19 +1,16 @@
 # services/messages_service.py
 from dataclasses import dataclass
-from typing import Iterable
 from repositories.messages_repo import MessagesRepo
 from repositories.clients_repo import ClientsRepo
-from sqlalchemy.orm import Session
-from db import SessionLocal
 
 class BadInput(Exception): pass
 class NoSuchUser(Exception): pass
 
-MAX_CONTENT = 1_000_000  # safety cap; tune as you like
+MAX_CONTENT = 1_000_000  # safety cap
 
 @dataclass
 class MessageService:
-    SessionLocal: callable = SessionLocal  # inject for testability
+    SessionLocal: callable
 
     def send_message(self, from_client: bytes, to_client: bytes, msg_type: int, content: bytes) -> int:
         if not isinstance(msg_type, int) or not (0 <= msg_type <= 255):
@@ -39,8 +36,8 @@ class MessageService:
                 s.rollback()
                 raise
 
-    def list_for_client(self, client_id: bytes, *, limit: int = 500, offset: int = 0):
+    def pull_waiting(self, client_id: bytes, *, limit: int = 500, offset: int = 0):
         with self.SessionLocal() as s:
             if not ClientsRepo.get_by_id(s, client_id):
                 raise NoSuchUser("requester")
-            return MessagesRepo.list_for_client(s, client_id, limit=limit, offset=offset)
+            return MessagesRepo.get_client_messages(s, client_id, limit=limit, offset=offset)

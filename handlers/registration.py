@@ -1,8 +1,8 @@
-from protocol.constants import ID_LEN, NAME_LEN, PUBKEY_LEN, OK_REGISTER
+from protocol.constants import NAME_LEN, PUBKEY_LEN, OK_REGISTER
 from protocol.codec import build_response
 from protocol.errors import error_response
 from services.clients_service import ClientsService, BadInput, DuplicateUsername
-from db import SessionLocal
+from database.db import SessionLocal
 
 # Registration related handlers
 

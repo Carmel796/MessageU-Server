@@ -2,7 +2,7 @@
 from typing import Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from models import Message  # your ORM model
+from database.models import Message  # your ORM model
 
 class MessagesRepo:
     @staticmethod
@@ -13,7 +13,7 @@ class MessagesRepo:
         return row
 
     @staticmethod
-    def list_for_client(s: Session, client_id: bytes, limit: int = 500, offset: int = 0) -> List[Message]:
+    def get_client_messages(s: Session, client_id: bytes, limit: int = 500, offset: int = 0) -> List[Message]:
         stmt = (
             select(Message)
             .where(Message.ToClient == client_id)

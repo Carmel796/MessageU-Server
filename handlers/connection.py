@@ -4,7 +4,7 @@ import struct
 from protocol.constants import HEADER_SIZE, HEADER_FMT
 from protocol.validators import validate_header, validate_payload
 from protocol.errors import error_response
-from router import dispatch
+from handlers.router import dispatch
 
 # Connection realted handlers
 

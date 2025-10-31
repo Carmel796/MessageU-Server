@@ -20,7 +20,7 @@ env/
 .vscode/
 
 # SQLite (don’t version DB files)
-defensive.db
+database/defensive.db
 defensive.db-*
 *.sqlite
 *.sqlite3

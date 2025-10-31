@@ -1,8 +1,10 @@
 # db.py (sync)
+import os
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "sqlite:///./defensive.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'defensive.db')}"
 
 engine = create_engine(
     DATABASE_URL,
