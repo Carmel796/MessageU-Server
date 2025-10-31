@@ -26,7 +26,6 @@ defensive.db-*
 *.sqlite3
 
 # Local runtime files
-myport.info
 *.log
 response
 response.txt
