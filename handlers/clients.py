@@ -38,4 +38,5 @@ def op602_get_pubkey(client_id, payload):
     except Exception:
         return error_response()
 
-    return build_response(OK_GET_PUBKEY, tgt_pubk)
+    body = payload + tgt_pubk
+    return build_response(OK_GET_PUBKEY, body)
