@@ -1,7 +1,7 @@
 # repositories/messages_repo.py
 from typing import Optional, List
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from database.models import Message  # your ORM model
 
 class MessagesRepo:
@@ -18,9 +18,18 @@ class MessagesRepo:
             select(Message)
             .where(Message.ToClient == client_id)
             .order_by(Message.ID.asc())
-            .limit(limit).offset(offset)
+            .limit(limit)
+            .offset(offset)
         )
-        return list(s.execute(stmt).scalars().all())
+        messages = list(s.execute(stmt).scalars().all())
+
+        if messages:
+            message_ids = [m.ID for m in messages]
+            del_stmt = delete(Message).where(Message.ID.in_(message_ids))
+            s.execute(del_stmt)
+            s.commit()
+
+        return messages
 
     @staticmethod
     def get_by_id(s: Session, msg_id: int) -> Optional[Message]:
